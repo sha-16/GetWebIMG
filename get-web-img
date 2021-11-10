@@ -86,7 +86,7 @@ else
 	echo -e "\n\t$ $0 http://url.net/images/ /root/my-images"
 	echo -e "\t$ $0 http://sha-16.crack/admin/images/ images-directory"
 	echo -e "\t$ $0 https://hackme.lammer/metasploit/images/ ."
-	echo -e "\n[!] Requirements: curl and html2text\n"	
+	echo -e "\n[!] Requirements: curl and html2text"	
 	exit 0
 fi
 
