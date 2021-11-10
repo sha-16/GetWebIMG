@@ -1,0 +1,93 @@
+#!/bin/bash 
+
+# Esto se puede hacer desde wget pero por practicar cree esta utilidad
+# This can be run with wget, but I've created this tool to train my bash skills 
+
+
+echo '  ______ ______   __       __  __  __ ______ ______    ____ ____    __ ______  '
+echo ' |   ___|   ___|_|  |_ ___|  \/  \|  |   ___|      >__|    |    \  /  |   ___| '
+echo ' |   |  |   ___|_    _|___|     /\   |   ___|     <___|    |     \/   |   |  | '
+echo ' |______|______| |__|     |____/  \__|______|______>  |____|__/\__/|__|______| '                                                                              
+
+###################################################################################################
+
+# CHECKER FUNCTIONS
+
+function checker_html2text(){
+	which html2text &>/dev/null
+
+	if [ $? -ne 0 ]; then
+		echo -e "\n[!] You have to install html2text before..."
+		echo -e "\n~ Try with this:"
+		echo -e "\n\t$ sudo apt install html2text -y"
+		echo -e "\t$ sudo apt-get install html2text -y"
+		exit 1
+	fi
+}
+
+function checker_curl(){
+	which curl &>/dev/null
+	
+	if [ $? -ne 0 ]; then
+		echo -e "\n[!] You have to install curl berfore..."
+		echo -e "\n~ Try with this:"
+		echo -e "\n\t$ sudo apt install curl -y"
+		echo -e "\t$ sudo apt-get install curl -y"
+		exit 1
+	fi
+}
+
+
+# Calling to the checker programs functions
+checker_html2text
+checker_curl
+
+function check_target(){
+	echo -e "\n~ Checking if the target is up..."
+	timeout 4 bash -c "curl $1" &>/dev/null
+
+	if [ $? -ne 0 ]; then
+		echo -e "\n[!] Error: check if your target is active..."
+		exit 1
+	fi
+}
+
+###################################################################################################
+
+# MAIN PROGRAM
+
+if [ $# -eq 2 ]; then 
+
+	# Calling the checker target function to check if the web server is active and it's valid.
+	check_target $1	
+
+	url="$1/"
+	directory=$2
+
+	# Checking if the directory exists 
+	if [ ! -d $directory ]; then 
+		mkdir $directory;
+	fi
+	
+	# Filter images
+	command=$(curl $url -s | html2text | grep IMG | sed "s/  */ /g" | cut -d ' ' -f 2) 
+
+	# Downloading files
+	echo -e "\n"
+	for img in $command; do
+		curl -k -s "$url$img" -o "$directory/$img" &>/dev/null && echo "[*] Downloading: $img"
+	done
+
+	echo -e "\n~ Finished...!"
+	exit 0
+		
+else
+	echo -e "\n[~] Use: $0 <url> <dir-to-save-files>"
+	echo -e "\n\t$ $0 http://url.net/images/ /root/my-images"
+	echo -e "\t$ $0 http://sha-16.crack/admin/images/ images-directory"
+	echo -e "\t$ $0 https://hackme.lammer/metasploit/images/ ."
+	echo -e "\n[!] Requirements: curl and html2text"	
+	exit 0
+fi
+
+###################################################################################################
