@@ -6,15 +6,18 @@ Esta es una utilidad que he creado como alternativa de wget, enfocada únicament
 * Facilitar la descarga de imágenes de directorios web.
 * Practicar y mejorar mis habilidades con Bash.
 
-## Instalación de requerimientos 
+## Requerimientos 
+
+La utilidad hace uso de las herramientas ```curl``` y ```html2text```.
+
 ```bash
 $ sudo apt install curl -y
 $ sudo apt install html2text -y
 ```
 
-## Instalación y uso
+## Instalación y uso de la herramienta
 ```bash
-$ git clone 
+$ git clone https://github.com/sha-16/get-web-img.git
 $ cd get-web-img 
 $ chmod +x get-web-img
 $ ./get-web-img
