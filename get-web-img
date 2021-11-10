@@ -47,7 +47,7 @@ function check_target(){
 	timeout 4 bash -c "curl $1" &>/dev/null
 
 	if [ $? -ne 0 ]; then
-		echo -e "\n[!] Error: check if your target is active..."
+		echo -e "\n[!] Error: check if your target is up..."
 		exit 1
 	fi
 }
